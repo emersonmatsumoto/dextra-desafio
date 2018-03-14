@@ -8,3 +8,6 @@ dotnet new xunit -o LancheTest
 dotnet sln add LancheAPI\LancheAPI.csproj
 dotnet sln add LancheTest\LancheTest.csproj
 dotnet add LancheTest\LancheTest.csproj reference LancheAPI\LancheAPI.csproj
+
+cd LancheAPI
+dotnet add package Microsoft.EntityFrameworkCore.SqlServer
