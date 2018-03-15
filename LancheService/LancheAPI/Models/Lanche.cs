@@ -5,6 +5,7 @@ namespace LancheAPI.Models
     {
         public int Id { get; set; }
         public string Nome { get; set; }
-        public virtual ICollection<Ingrediente> Ingredientes { get; set; }
+        public virtual ICollection<LancheIngrediente> LancheIngrediente { get; set; }
+        public List<Ingrediente> Ingredientes { get; set; }
     }
 }

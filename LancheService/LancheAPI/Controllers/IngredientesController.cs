@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using LancheAPI.Models;
+using LancheAPI.Models.Repositories;
 
 namespace LancheAPI.Controllers
 {
@@ -21,36 +22,13 @@ namespace LancheAPI.Controllers
         public async Task<IEnumerable<Ingrediente>> Get()
         {
             return await _uow.IngredienteRepository.FindAll();
-
-            // return new Ingrediente[] { 
-            //     new Ingrediente {
-            //         Nome = "Alface",
-            //         Valor = 0.40m
-            //     },    
-            //     new Ingrediente {
-            //         Nome = "Bacon",
-            //         Valor = 2m
-            //     },
-            //     new Ingrediente {
-            //         Nome = "Hambúrger de carne",
-            //         Valor = 3m
-            //     },
-            //     new Ingrediente {
-            //         Nome = "Ovo",
-            //         Valor = 0.80m
-            //     },
-            //     new Ingrediente {
-            //         Nome = "Queijo",
-            //         Valor = 1.50m
-            //     },
-            // };
         }
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<Ingrediente> Get(int id)
         {
-            return "value";
+            return await _uow.IngredienteRepository.Get(id);
         }
 
         // POST api/values
@@ -62,14 +40,26 @@ namespace LancheAPI.Controllers
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public async Task Put(int id, [FromBody]Ingrediente value)
         {
+            value.Id = id;
+            await _uow.IngredienteRepository.Update(value);
         }
 
         // DELETE api/values/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
+            try
+            {
+                await _uow.LancheRepository.Delete(id);
+            }
+            catch(ArgumentException)
+            {
+                return NotFound();
+            }
+
+            return NoContent();
         }
     }
 }

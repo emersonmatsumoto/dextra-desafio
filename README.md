@@ -11,3 +11,13 @@ dotnet add LancheTest\LancheTest.csproj reference LancheAPI\LancheAPI.csproj
 
 cd LancheAPI
 dotnet add package Microsoft.EntityFrameworkCore.SqlServer
+
+Adicione em LancheAPI.csproj
+  <ItemGroup>
+    ...  
+    <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.0.2" />
+    <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.2" />
+  </ItemGroup>
+  
+dotnet restore
+dotnet ef migrations add InitialCreate

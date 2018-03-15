@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using LancheAPI.Models;
+using LancheAPI.Models.Repositories;
 
 namespace LancheAPI.Controllers
 {
@@ -11,53 +12,56 @@ namespace LancheAPI.Controllers
     public class LanchesController : Controller
     {
         // GET api/values
-        [HttpGet]
-        public IEnumerable<Lanche> Get()
+        private readonly IUnitOfWork _uow;
+
+        public LanchesController(IUnitOfWork uow)
         {
-            return new Lanche[] { 
-                new Lanche {
-                    Nome = "X-Bacon",
-                    Ingredientes = new List<Ingrediente>{
-                        new Ingrediente{
-                            Nome = "Bacon",
-                            Valor = 2m
-                        },
-                        new Ingrediente{
-                            Nome = "Hambúrger de carne",
-                            Valor = 3m
-                        },
-                        new Ingrediente{
-                            Nome = "Queijo",
-                            Valor = 1.5m
-                        }
-                    }
-                }    
-            };
+            _uow = uow;
+        }
+
+        [HttpGet]
+        public async Task<IEnumerable<Lanche>> Get()
+        {
+            var lanches = await _uow.LancheRepository.FindAll();
+            return lanches;
         }
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<Lanche> Get(int id)
         {
-            return "value";
+            return await _uow.LancheRepository.Get(id);
         }
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody]string value)
+        public async Task Post([FromBody]Lanche value)
         {
+            await _uow.LancheRepository.Save(value);
         }
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public async Task Put(int id, [FromBody]Lanche value)
         {
+            value.Id = id;
+            await _uow.LancheRepository.Update(value);
         }
 
         // DELETE api/values/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
+            try
+            {
+                await _uow.LancheRepository.Delete(id);
+            }
+            catch(ArgumentException)
+            {
+                return NotFound();
+            }
+
+            return NoContent();
         }
     }
 }

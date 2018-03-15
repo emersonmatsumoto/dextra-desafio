@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using LancheAPI.Models;
+using LancheAPI.Models.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace LancheAPI
@@ -25,13 +26,19 @@ namespace LancheAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<GenericDbContext>(options => options.UseInMemoryDatabase(databaseName: "LancheService"));
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddMvc();
+            var connection = Configuration.GetConnectionString("LancheContext");
+            services.AddDbContext<GenericDbContext>(options => options.UseSqlServer(connection));
+            services.AddScoped<IUnitOfWork, UnitOfWork>();            
+            services.AddMvc().AddJsonOptions(o =>                
+                {
+                    o.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                    o.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+                }
+            );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, GenericDbContext context)
         {
             if (env.IsDevelopment())
             {
@@ -39,6 +46,7 @@ namespace LancheAPI
             }
 
             app.UseMvc();
+            DbInitializer.Initialize(context);
         }
     }
 }

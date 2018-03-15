@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace LancheAPI.Models
+namespace LancheAPI.Models.Repositories
 {
     public class GenericDbContext : DbContext
     {
@@ -20,8 +20,9 @@ namespace LancheAPI.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Lanche>().ToTable("Lanche");
-            modelBuilder.Entity<Ingrediente>().ToTable("Ingrediente");
+            new IngredienteMap(modelBuilder.Entity<Ingrediente>());
+            new LancheMap(modelBuilder.Entity<Lanche>());
+            new LancheIngredienteMap(modelBuilder.Entity<LancheIngrediente>());
         }
 
     }
