@@ -21,26 +21,31 @@ namespace LancheAPI.Models.Repositories
             var alface = new Ingrediente
             {
                 Nome = "Alface",
+                Quantidade = 1,
                 Valor = 0.40m
             };
             var bacon = new Ingrediente
             {
                 Nome = "Bacon",
+                Quantidade = 1,
                 Valor = 2m
             };
             var hamburger = new Ingrediente
             {
                 Nome = "Hambúrger de carne",
+                Quantidade = 1,
                 Valor = 3m
             };
             var ovo = new Ingrediente
             {
                 Nome = "Ovo",
+                Quantidade = 1,
                 Valor = 0.80m
             };
             var queijo = new Ingrediente
             {
                 Nome = "Queijo",
+                Quantidade = 1,
                 Valor = 1.50m
             };
 

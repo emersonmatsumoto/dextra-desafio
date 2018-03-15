@@ -26,5 +26,14 @@ namespace PromocaoAPI.Models.Repositories
                 .FirstOrDefaultAsync();
         }
 
+        public async Task<Promocao> Get(string lancheNome)
+        {
+            return await _dbContext.Set<Lanche>()
+                .Where(w => w.Nome == lancheNome)
+                .Include("Promocao")
+                .Select(s => s.Promocao)
+                .FirstOrDefaultAsync();
+        }
+
     }
 }

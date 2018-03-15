@@ -28,6 +28,7 @@ namespace PromocaoAPI
             var connection = Configuration.GetConnectionString("PromocaoContext");
             services.AddDbContext<GenericDbContext>(options => options.UseSqlServer(connection));
             services.AddScoped<IUnitOfWork, UnitOfWork>();            
+            services.AddScoped<ICalculaValor, CalculaValor>();            
             services.AddMvc().AddJsonOptions(o =>                
                 {
                     o.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;

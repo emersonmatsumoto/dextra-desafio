@@ -36,7 +36,7 @@ namespace PromocaoAPI.Models.Repositories
                 {
                     new Lanche
                     {
-                        Nome = "X-Burguer"
+                        Nome = "X-Burger"
                     }
                 }
             };
