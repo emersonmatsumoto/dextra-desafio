@@ -11,18 +11,47 @@ namespace Web.Services
 {
     public class LancheService : ILancheService
     {
+        private HttpClient _client;
+
+        public LancheService()
+        {
+            _client = new HttpClient();
+            _client.BaseAddress = new Uri("http://localhost:5001/");            
+        }
         public async Task<List<Lanche>> Listar()
         {
-            HttpClient client = new HttpClient();
             List<Lanche> lanches = null;
-            var path = "lanches";
-            client.BaseAddress = new Uri("http://localhost:5001/");
-            HttpResponseMessage response = await client.GetAsync(path);
+            
+            HttpResponseMessage response = await _client.GetAsync("lanches");
             if (response.IsSuccessStatusCode)
             {
                 lanches = await response.Content.ReadAsJsonAsync<List<Lanche>>();
             }
             return lanches;
+        }
+
+        public async Task<Lanche> Obter(int id)
+        {
+            Lanche lanche = null;
+            
+            HttpResponseMessage response = await _client.GetAsync("lanches/" + id.ToString());
+            if (response.IsSuccessStatusCode)
+            {
+                lanche = await response.Content.ReadAsJsonAsync<Lanche>();
+            }
+            return lanche;
+        }
+
+        public async Task<List<Ingrediente>> ListarIngredientes()
+        {
+            List<Ingrediente> ingredientes = null;
+            
+            HttpResponseMessage response = await _client.GetAsync("ingredientes");
+            if (response.IsSuccessStatusCode)
+            {
+                ingredientes = await response.Content.ReadAsJsonAsync<List<Ingrediente>>();
+            }
+            return ingredientes;
         }
     }
 }

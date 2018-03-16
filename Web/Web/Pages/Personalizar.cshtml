@@ -1,0 +1,53 @@
+﻿@page
+@model PersonalizarModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+
+<div class="row">
+    <div class="col-md-3">
+        <h1>@Model.Lanche.Nome</h1>
+    </div>    
+</div>
+<div class="row">
+    <form action="carrinho" method="POST">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="lanche.id" value="@Model.compra" />
+        <div class="col-md-6">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Ingrediente</th>
+                        <th style="width:100px">Quantidade</th>
+                        <th>Valor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @for(var i = 0; i < @Model.Ingredientes.Count; i++)
+                {
+                    var ing = @Model.Ingredientes[i];
+                    <tr>
+                        <td>@ing.Nome</td>
+                        <td>
+                            <input name="lanche.ingredientes[@i].quantidade" class="form-control" type="number" value="@ing.Quantidade" min="0" max="10" />
+                            <input name="lanche.ingredientes[@i].id" type="hidden" value="@ing.Id" />
+                        </td>
+                        <td>@ing.Valor.ToString("C")</td>
+                    </tr>    
+                }              
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-3">
+            <div class="thumbnail">
+                <img src="~/images/@(Model.Lanche.Nome).jpg" class="img-rounded img-responsive" />
+                <div class="caption">
+                    <p>
+                        <button class="btn btn-primary" type="submit" name="compra" >Finalizar</button>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
