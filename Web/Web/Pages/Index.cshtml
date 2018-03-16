@@ -20,8 +20,8 @@
                 <div class="caption">
                     <h3>@lanche.Nome</h3>
                     <h4>@lanche.Total</h4>
-                    <p>
-                        @string.Join(",", lanche.Ingredientes.Select(s => s.Nome))
+                    <p style="min-height: 50px">
+                        @string.Join(", ", lanche.Ingredientes.Select(s => s.Nome))
                     </p>
                     <p><a href="#" class="btn btn-primary" role="button">Comprar</a></p>
                 </div>
