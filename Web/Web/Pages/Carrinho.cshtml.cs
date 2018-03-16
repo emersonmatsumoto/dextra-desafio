@@ -12,10 +12,12 @@ namespace Web.Pages
     public class CarrinhoModel : PageModel
     {
         private readonly ILancheService _lancheService;
+        private readonly IPromocaoService _promocaoService;
 
-        public CarrinhoModel(ILancheService lancheService)
+        public CarrinhoModel(ILancheService lancheService, IPromocaoService promocaoService)
         {
             _lancheService = lancheService;
+            _promocaoService = promocaoService;
         }
 
         [BindProperty]
@@ -27,7 +29,7 @@ namespace Web.Pages
             {
                 return Page();
             }
-            
+
             var lan = await _lancheService.Obter(Lanche.Id);
             var ings = await _lancheService.ListarIngredientes();
 
@@ -43,7 +45,7 @@ namespace Web.Pages
                 }
             }
 
-            
+            var desconto = await _promocaoService.CalculaDesconto(lan);
         
             //Some logic here…
         

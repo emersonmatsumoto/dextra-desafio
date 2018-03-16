@@ -23,6 +23,7 @@ namespace Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<ILancheService, LancheService>();
+            services.AddScoped<IPromocaoService, PromocaoService>();
             services.AddMvc();
         }
 

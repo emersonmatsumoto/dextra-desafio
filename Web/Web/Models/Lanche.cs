@@ -6,6 +6,11 @@ namespace Web.Models
 {
     public class Lanche 
     {
+        public Lanche()
+        {
+            Ingredientes = new List<Ingrediente>();
+        }
+        
         public int Id { get; set; }
         public string Nome { get; set; }
 
