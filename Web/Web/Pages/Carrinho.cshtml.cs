@@ -13,23 +13,22 @@ namespace Web.Pages
     {
         private readonly ILancheService _lancheService;
         private readonly IPromocaoService _promocaoService;
+        private readonly IPedidoService _pedidoService;
 
-        public CarrinhoModel(ILancheService lancheService, IPromocaoService promocaoService)
+        public CarrinhoModel(ILancheService lancheService, IPromocaoService promocaoService, IPedidoService pedidoService)
         {
             _lancheService = lancheService;
             _promocaoService = promocaoService;
+            _pedidoService = pedidoService;
         }
 
         [BindProperty]
         public Lanche Lanche { get; set; }
 
-        public async Task<IActionResult> OnPostAsync() //(2)
-        {
-            if(!ModelState.IsValid)
-            {
-                return Page();
-            }
+        public Pedido Pedido { get; private set; }
 
+        public async Task OnPostAsync() 
+        {            
             var lan = await _lancheService.Obter(Lanche.Id);
             var ings = await _lancheService.ListarIngredientes();
 
@@ -47,9 +46,25 @@ namespace Web.Pages
 
             var desconto = await _promocaoService.CalculaDesconto(lan);
         
-            //Some logic here…
-        
-            return RedirectToPage();
+            var pedido = new Pedido();
+
+            var item = new Item() 
+            {
+                Descricao = lan.Nome,
+                Quantidade = 1,
+                Valor = lan.Total
+            };
+
+            pedido.Itens.Add(item);
+
+            if (desconto != null)
+            {
+                pedido.Descontos.Add(desconto);
+            }
+
+
+            await _pedidoService.Criar(pedido);
+            Pedido = pedido;
         }
     }
 }

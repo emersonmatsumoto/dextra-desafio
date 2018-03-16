@@ -24,6 +24,7 @@ namespace Web
         {
             services.AddScoped<ILancheService, LancheService>();
             services.AddScoped<IPromocaoService, PromocaoService>();
+            services.AddScoped<IPedidoService, PedidoService>();
             services.AddMvc();
         }
 

@@ -10,11 +10,11 @@ namespace Web.Models
         {
             Ingredientes = new List<Ingrediente>();
         }
-        
+
         public int Id { get; set; }
         public string Nome { get; set; }
 
-        public string Total 
+        public decimal Total 
         {
             get 
             {
@@ -24,8 +24,7 @@ namespace Web.Models
                     t += i.Valor * i.Quantidade;
                 }
 
-                CultureInfo pt = new CultureInfo("pt-BR");
-                return t.ToString("C", pt);
+                return t;
             }
         }
 
